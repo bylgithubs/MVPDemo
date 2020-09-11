@@ -76,15 +76,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Model *model = self.dataArr[indexPath.row];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"点击第%@行",model.titleStr] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alertView.tag = indexPath.row;
-    [alertView show];
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"点击第%@行",model.titleStr] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//    alertView.tag = indexPath.row;
+//    [alertView show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"点击第%@行",model.titleStr] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelBtn = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *sureBtn = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self.presenter confirmClicked:self.dataArr[indexPath.row]];
+        NSLog(@"==========确定");
+    }];
+    [alert addAction:cancelBtn];
+    [alert addAction:sureBtn];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        [self.presenter confirmClicked:_dataArr[alertView.tag]];
-    }
+//    if (buttonIndex == 1) {
+//        [self.presenter confirmClicked:_dataArr[alertView.tag]];
+//    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
